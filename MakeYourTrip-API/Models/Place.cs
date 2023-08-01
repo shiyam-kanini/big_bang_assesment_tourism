@@ -17,6 +17,7 @@ namespace MakeYourTrip_API.Models
         public bool AmenityParking { get; set; }
         public bool AmenityBathroom { get; set; }
         public int VisitingDay { get; set; }
+        public int PlacePrice { get; set; }
         public ICollection<PlaceImage>? PlaceImages{ get; set; }
         public ICollection<PlaceFestival>? PlaceFestivals{ get; set; }
     }

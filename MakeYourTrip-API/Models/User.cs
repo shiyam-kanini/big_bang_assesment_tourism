@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿
+using Microsoft.Identity.Client;
 
 namespace MakeYourTrip_API.Models
 {
@@ -16,6 +17,7 @@ namespace MakeYourTrip_API.Models
         public byte[]? PasswordHash { get; set; }
         public byte[]? PasswordKey { get; set; }
         public string? UserState { get; set; }
+        public bool Married { get; set; }
         public ICollection<PackageBooking>? PackageBookings { get; set; }
     }
 }

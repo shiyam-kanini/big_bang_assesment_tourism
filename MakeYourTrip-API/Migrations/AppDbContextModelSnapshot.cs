@@ -33,6 +33,9 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<string>("CouponDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CouponDiscountPercentage")
+                        .HasColumnType("int");
+
                     b.Property<string>("CouponExpiration")
                         .HasColumnType("nvarchar(max)");
 
@@ -140,8 +143,14 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<string>("PackageDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PackageImgURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PackageName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PackagePrice")
+                        .HasColumnType("int");
 
                     b.Property<string>("PackageType")
                         .HasColumnType("nvarchar(max)");
@@ -165,8 +174,20 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<string>("Coupon_IdCouponId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Gst")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GuideCost")
+                        .HasColumnType("int");
+
                     b.Property<string>("GuideEmployeeId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Hotel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HotelCost")
+                        .HasColumnType("int");
 
                     b.Property<string>("JourneyDate")
                         .HasColumnType("nvarchar(max)");
@@ -177,8 +198,20 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<string>("Package_IdPackageId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("TotalCost")
+                        .HasColumnType("int");
+
                     b.Property<string>("User_IdUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isBooked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isBooking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isPlace")
+                        .HasColumnType("bit");
 
                     b.HasKey("PackageUserId");
 
@@ -193,6 +226,26 @@ namespace MakeYourTrip_API.Migrations
                     b.ToTable("PackageBookings");
                 });
 
+            modelBuilder.Entity("MakeYourTrip_API.Models.PackageBookingPlace", b =>
+                {
+                    b.Property<string>("PBPId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PackageBooking_IdPackageUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Place_PB_IdPlaceId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PBPId");
+
+                    b.HasIndex("PackageBooking_IdPackageUserId");
+
+                    b.HasIndex("Place_PB_IdPlaceId");
+
+                    b.ToTable("PackageBookingsPlaces");
+                });
+
             modelBuilder.Entity("MakeYourTrip_API.Models.Place", b =>
                 {
                     b.Property<string>("PlaceId")
@@ -204,14 +257,14 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<bool>("AmenityParking")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PackageBookingPackageUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("PlaceDescription")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlaceName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlacePrice")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PlaceRating")
                         .HasColumnType("int");
@@ -235,8 +288,6 @@ namespace MakeYourTrip_API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PlaceId");
-
-                    b.HasIndex("PackageBookingPackageUserId");
 
                     b.ToTable("Places");
                 });
@@ -305,6 +356,9 @@ namespace MakeYourTrip_API.Migrations
 
                     b.Property<string>("IsActive")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Married")
+                        .HasColumnType("bit");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("varbinary(max)");
@@ -383,11 +437,19 @@ namespace MakeYourTrip_API.Migrations
                     b.Navigation("User_Id");
                 });
 
-            modelBuilder.Entity("MakeYourTrip_API.Models.Place", b =>
+            modelBuilder.Entity("MakeYourTrip_API.Models.PackageBookingPlace", b =>
                 {
-                    b.HasOne("MakeYourTrip_API.Models.PackageBooking", null)
-                        .WithMany("Places_Id")
-                        .HasForeignKey("PackageBookingPackageUserId");
+                    b.HasOne("MakeYourTrip_API.Models.PackageBooking", "PackageBooking_Id")
+                        .WithMany()
+                        .HasForeignKey("PackageBooking_IdPackageUserId");
+
+                    b.HasOne("MakeYourTrip_API.Models.Place", "Place_PB_Id")
+                        .WithMany()
+                        .HasForeignKey("Place_PB_IdPlaceId");
+
+                    b.Navigation("PackageBooking_Id");
+
+                    b.Navigation("Place_PB_Id");
                 });
 
             modelBuilder.Entity("MakeYourTrip_API.Models.PlaceFestival", b =>
@@ -429,11 +491,6 @@ namespace MakeYourTrip_API.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("Coupons");
-                });
-
-            modelBuilder.Entity("MakeYourTrip_API.Models.PackageBooking", b =>
-                {
-                    b.Navigation("Places_Id");
                 });
 
             modelBuilder.Entity("MakeYourTrip_API.Models.Place", b =>
