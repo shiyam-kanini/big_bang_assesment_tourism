@@ -266,7 +266,7 @@ namespace MakeYourTrip_API.Migrations
                     b.Property<int>("PlacePrice")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PlaceRating")
+                    b.Property<int>("PlaceRating")
                         .HasColumnType("int");
 
                     b.Property<string>("PlaceState")
