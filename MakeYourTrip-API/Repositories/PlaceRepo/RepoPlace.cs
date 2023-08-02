@@ -102,7 +102,7 @@ namespace MakeYourTrip_API.Repositories.PlaceRepo
             }
             catch(Exception ex)
             {
-                AddGetCommonResponse(false, ex.Message);
+                AddGetCommonResponse(false, ex.StackTrace);
                 return getResponse;
             }
         }

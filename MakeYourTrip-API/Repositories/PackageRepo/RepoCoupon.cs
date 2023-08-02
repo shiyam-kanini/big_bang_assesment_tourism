@@ -64,9 +64,9 @@ namespace MakeYourTrip_API.Repositories.PackageRepo
                     AddCouponResponse(false, $"{couponData.CouponName} already exists under id : {newCoupon.CouponId}"); return couponResponse;
                 }
                 AddCoupon($"COUPID{_random.Next(10000,99999)}", couponData, await _context.Packages.FindAsync(couponData.ApplicablePackageId));
-                await _context.Coupons.AddAsync(newCoupon ?? new Coupon());
+                await _context.Coupons.AddAsync(newCoupon);
                 await _context.SaveChangesAsync();
-                return couponResponse;
+                AddCouponResponse(true, $"{newCoupon.CouponId}({couponData.CouponName}) has been added"); return couponResponse;
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace MakeYourTrip_API.Repositories.PackageRepo
             try
             {
                 newCoupon = await _context.Coupons.FindAsync(id);
-                if (newCoupon != null)
+                if (newCoupon == null)
                 {
                     AddCouponResponse(false, $"No Coupon found with id : {newCoupon.CouponId}"); return couponResponse;
                 }
