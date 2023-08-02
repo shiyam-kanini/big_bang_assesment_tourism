@@ -16,6 +16,7 @@ namespace MakeYourTrip_API.Models
         public DbSet<LoginLog> LoginLogs { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<PackageBooking> PackageBookings { get; set; }  
+        public DbSet<PackageBookingPlace> PackageBookingsPlaces { get; set; }
         
     }
 }

@@ -10,7 +10,9 @@ namespace MakeYourTrip_API.Models
         public string? PackageType { get; set; }
         public string? PackageDescription { get; set; }
         public int PlaceCount { get; set; }
+        public int? PackagePrice { get; set; }
+        public string? PackageImgURL { get; set; }
         public ICollection<Coupon>? Coupons { get; set; }
-        public ICollection<PackageBooking> Bookings { get; set; }
+        public ICollection<PackageBooking>? Bookings { get; set; }
     }
 }

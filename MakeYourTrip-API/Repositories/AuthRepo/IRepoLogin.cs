@@ -8,5 +8,6 @@ namespace MakeYourTrip_API.Repositories.AuthRepo
     {
         Task<LoginResponse> EmployeeLogin(LoginRequest loginData);
         Task<LoginResponse> UserLogin(LoginRequest loginData);
+        Task<LoginResponse> Logout(string sessionId);
     }
 }
