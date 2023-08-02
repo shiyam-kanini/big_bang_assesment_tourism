@@ -1,8 +1,10 @@
 using MakeYourTrip_API.Models;
+using MakeYourTrip_API.Repositories.AdminRepo;
 using MakeYourTrip_API.Repositories.AuthRepo;
 using MakeYourTrip_API.Repositories.FestivalRepo;
 using MakeYourTrip_API.Repositories.PackageRepo;
 using MakeYourTrip_API.Repositories.PlaceRepo;
+using MakeYourTrip_API.Repositories.ProfileRepo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +32,8 @@ internal class Program
         builder.Services.AddScoped<IRepoPackage, RepoPackage>();
         builder.Services.AddScoped<IRepoCoupon, RepoCoupon>();
         builder.Services.AddScoped<IRepoPackageBooking, RepoPackageBooking>();
+        builder.Services.AddScoped<IRepoProfile, RepoProfile>();
+        builder.Services.AddScoped<IRepoAdmin, RepoAdmin>();
 
 
         builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("connection")));

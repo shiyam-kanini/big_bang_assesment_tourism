@@ -2,6 +2,7 @@
 using MakeYourTrip_API.ModelsDTO.PackageModels;
 using MakeYourTrip_API.ModelsResponse;
 using MakeYourTrip_API.ModelsResponse.PackageResponses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Net;
@@ -18,6 +19,7 @@ namespace MakeYourTrip_API.Repositories.PackageRepo
         }
         PackageBooking? package = new();
         PackageBookingResponse response = new();
+        int tCost = 0;
         public async Task<PackageBookingResponse> InitiateBookingSession(InitiateBooking initiateData)
         {
             try
@@ -124,21 +126,21 @@ namespace MakeYourTrip_API.Repositories.PackageRepo
             };
         }
 
-        public  async Task<PackageBookingResponse> PickDate(PickDateRequest pickDateRequest)
+        public  async Task<PackageBookingResponse> PickDate(PickDateRequest pickDateData)
         {
             try
             {
-                package = await _context.PackageBookings.FindAsync(pickDateRequest.BookId);
+                package = await _context.PackageBookings.FindAsync(pickDateData.BookId);
                 if(package == null || !package.isBooking)
                 {
-                    AddResponse(false, $"Booking session({pickDateRequest.BookId}) has been expired or closed"); return response;
+                    AddResponse(false, $"Booking session({pickDateData.BookId}) has been expired or closed"); return response;
                 }
                 _context.Entry(package).State = EntityState.Detached;
-                package.JourneyDate = pickDateRequest.Date;
+                package.JourneyDate = pickDateData.Date;
                 package.BookingDate = DateTime.UtcNow.ToString();
                 _context.Entry(package).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                AddResponse(true, $"{pickDateRequest.Date} date has been booked");
+                AddResponse(true, $"{pickDateData.Date} date has been booked");
                 return response;
             }
             catch (Exception ex)
@@ -150,13 +152,89 @@ namespace MakeYourTrip_API.Repositories.PackageRepo
         {
             try
             {
-                package = await _context.PackageBookings.Include(x => x.);
-
+                package = await _context.PackageBookings.FindAsync(chooseHotelData.BookId);
+                if(package == null || !package.isBooking)
+                {
+                    AddResponse(false, $"Booking session({chooseHotelData.BookId}) has been expired or closed"); return response;
+                }
+                _context.Entry(package).State = EntityState.Detached;
+                package.Hotel = chooseHotelData.HotelId;
+                package.HotelCost = chooseHotelData.HotelCost;
+                _context.Entry(package).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                AddResponse(true, $"{chooseHotelData.HotelId} date has been booked");
+                return response;
             }
             catch (Exception ex)
             {
                 AddResponse(false, ex.Message); return response;
             }
+        }
+
+        public async Task<PackageBookingResponse> PickGuide(PickGuideRequest pickGuideData)
+        {
+            try
+            {
+                package = await _context.PackageBookings.FindAsync(pickGuideData.BookId);
+                Employee? isGuide = await _context.Employees.FindAsync(pickGuideData.GuideId); 
+                if (package == null || !package.isBooking)
+                {
+                    AddResponse(false, $"Booking session({pickGuideData.BookId}) has been expired or closed"); return response;
+                }
+                if(isGuide == null)
+                {
+                    AddResponse(false, $"No Guide found for id : {pickGuideData.GuideId}"); return response;
+                }
+                _context.Entry(package).State = EntityState.Detached;
+                package.Guide = isGuide;
+                package.GuideCost = pickGuideData.GuideCost;
+                _context.Entry(package).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                AddResponse(true, $"{isGuide.EmployeeId}({isGuide.EmployeeFirstName} {isGuide.EmployeeLastName}) has been booked");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                AddResponse(false, ex.Message); return response;
+            }
+        }
+        public float? CalculateTotalCost(PackageBooking package, List<PackageBookingPlace> bookedPlaces)
+        {
+            float? tCost = package.HotelCost + package.GuideCost + package.Package_Id.PackagePrice;
+            foreach(PackageBookingPlace place in bookedPlaces)
+            {
+                tCost += (float)place.Place_PB_Id.PlacePrice;
+            }
+            tCost += tCost * (18 / 100);
+            return tCost;
+        }
+
+        public async Task<PackageBookingResponse> GenerateBill(string BookId)
+        {
+            try
+            {
+                package = await _context.PackageBookings.FindAsync(BookId);
+                List<PackageBookingPlace> bookedPlaces = await _context.PackageBookingsPlaces.Where(x => x.PackageBooking_Id.PackageUserId.Equals(BookId)).ToListAsync();
+                if (package == null || !package.isBooking)
+                {
+                    AddResponse(false, $"Booking session({BookId}) has been expired or closed"); return response;
+                }
+                if(bookedPlaces.Count <= 0) 
+                {
+                    AddResponse(false, $"Place not found"); return response;
+                }
+                float? totalCost = CalculateTotalCost(package, bookedPlaces);
+                AddResponse(true, $"{totalCost}");
+                return response;
+            }
+            catch(Exception ex)
+            {
+                AddResponse(false, ex.Message);return response;
+            }
+        }
+        public Task<PackageBookingResponse> ApplyCoupon(ApplyCouponRequest applyCouuponData)
+        {
+            throw new NotImplementedException();
         }
     }
 }

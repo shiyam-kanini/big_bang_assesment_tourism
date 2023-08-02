@@ -38,5 +38,23 @@ namespace MakeYourTrip_API.Controllers
         {
             return await _repoPackageBooking.PickDate(pickDateRequest);
         }
+        [HttpPut]
+        [Route("choosehotel")]
+        public async Task<PackageBookingResponse> ChooseHotel(ChooseHotelRequest chooseHotelData)
+        {
+            return await _repoPackageBooking.ChooseHotel(chooseHotelData);
+        }
+        [HttpPut]
+        [Route("pickguide")]
+        public async Task<PackageBookingResponse> PickGuide(PickGuideRequest pickGuideData)
+        {
+            return await _repoPackageBooking.PickGuide(pickGuideData);
+        }
+        [HttpPut]
+        [Route("generatebill")]
+        public async Task<PackageBookingResponse> GenerateBill(string BookId)
+        {
+            return await _repoPackageBooking.GenerateBill(BookId);
+        }
     }
 }

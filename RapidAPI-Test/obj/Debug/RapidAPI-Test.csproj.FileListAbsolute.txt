@@ -1,8 +1,0 @@
-E:\big_bang_assesment_tourism\RapidAPI-Test\obj\Debug\RapidAPI-Test.csproj.AssemblyReference.cache
-E:\big_bang_assesment_tourism\RapidAPI-Test\obj\Debug\RapidAPI-Test.csproj.SuggestedBindingRedirects.cache
-E:\big_bang_assesment_tourism\RapidAPI-Test\obj\Debug\RapidAPI-Test.csproj.CoreCompileInputs.cache
-E:\big_bang_assesment_tourism\RapidAPI-Test\bin\Debug\RapidAPI-Test.exe.config
-E:\big_bang_assesment_tourism\RapidAPI-Test\bin\Debug\RapidAPI-Test.exe
-E:\big_bang_assesment_tourism\RapidAPI-Test\bin\Debug\RapidAPI-Test.pdb
-E:\big_bang_assesment_tourism\RapidAPI-Test\obj\Debug\RapidAPI-Test.exe
-E:\big_bang_assesment_tourism\RapidAPI-Test\obj\Debug\RapidAPI-Test.pdb
