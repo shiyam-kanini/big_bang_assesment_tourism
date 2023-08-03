@@ -1,22 +1,31 @@
 import { useEffect } from 'react';
 import './App.css';
-import {employeeLogin, employeeRegister, userRegister, userLogin, logout} from './services/authServices/authServices'
-import axios from 'axios';
-import Comp from './components/component';
+import {getEmployeeProfile, getUserProfile, updateEmployeeProfile, updateUserProfile} from './services/profileServices/profileService'
+
 function App() {
   
-  const fetchFestivals = async() => {
+  const fetchData = async() => {
     try{
-      const response = await axios.get('https://www.googleapis.com/drive/v3/about')
+      const response = await updateUserProfile("UID96479", {
+        "userFirstName": "string",
+        "userLastName": "string",
+        "userImageUrl": "string",
+        "userEmail": "string",
+        "countryCode": "string",
+        "userPhone": "string",
+        "userState": "string",
+        "password": "string"
+      });
       console.log(response)
     }
     catch(error){
       console.log(error)
     }
   }
+  
   return (
     <div className="App">
-      <Comp></Comp>
+      <button onClick={fetchData}>get</button>
     </div>
   );
 }
